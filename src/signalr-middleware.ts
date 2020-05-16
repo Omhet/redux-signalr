@@ -1,9 +1,9 @@
 import * as signalR from "@microsoft/signalr";
 import { SignalMiddleware, MiddlewareConfig } from './types';
 
-const signal = ({ callbacks, onStart = () => { }, url, logLevel = signalR.LogLevel.Error, connectionOptions = {}, connection: userConnection }: MiddlewareConfig): SignalMiddleware => store => {
+const signal = ({ callbacks, onStart = () => { }, url, logLevel = signalR.LogLevel.Error, connectionOptions = {} }: MiddlewareConfig): SignalMiddleware => store => {
     
-    const connection = userConnection ?? new signalR.HubConnectionBuilder()
+    const connection = new signalR.HubConnectionBuilder()
         .configureLogging(logLevel)
         .withUrl(url, connectionOptions)
         .build();
