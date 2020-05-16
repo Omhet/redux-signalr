@@ -1,6 +1,6 @@
 {
   "name": "redux-signalr",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Redux middleware for SignalR (ASP.NET Core)",
   "keywords": [
     "SignalR",
@@ -14,8 +14,11 @@
     "url": "https://github.com/Omhet/redux-signalr/issues",
     "email": "omhetehmo@yandex.ru"
   },
-  "main": "index.js",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json"
   },
@@ -23,7 +26,7 @@
     "type": "git",
     "url": "https://github.com/Omhet/redux-signalr.git"
   },
-  "author": "Vladimir Ivanov (Omhet) omhetehmo@yandex.ru (https://omhet.github.io/)",
+  "author": "Vladimir Ivanov (Omhet) <omhetehmo@yandex.ru> (https://omhet.github.io/)",
   "license": "MIT",
   "private": false,
   "engines": {
