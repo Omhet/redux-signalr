@@ -1,4 +1,4 @@
-Redux middleware for SignalR (ASP.NET Core)
+# Redux middleware for SignalR (ASP.NET Core)
 
 ## Installation
 
