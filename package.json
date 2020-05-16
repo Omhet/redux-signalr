@@ -15,8 +15,9 @@
     "email": "omhetehmo@yandex.ru"
   },
   "main": "index.js",
+  "module": "./dist/index.js",
   "scripts": {
-    "test": "mocha"
+    "build": "node ./node_modules/typescript/bin/tsc --project ./tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -31,5 +32,9 @@
   "engineStrict": true,
   "dependencies": {
     "@microsoft/signalr": "^3.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.1",
+    "typescript": "^3.9.2"
   }
 }

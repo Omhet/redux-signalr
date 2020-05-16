@@ -48,5 +48,6 @@ export interface MiddlewareConfig {
     connection?: signalR.HubConnection,
     url: string,
     connectionOptions?: signalR.IHttpConnectionOptions,
-    logLevel?: signalR.LogLevel
+    logLevel?: signalR.LogLevel,
+    onStart?(): void;
 }
