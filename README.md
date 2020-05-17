@@ -12,7 +12,8 @@ yarn add redux-signalr
 
 ## Usage
 
-NOTE: You don't need to install @microsoft/signalr as  it's already included in this package for convenience and exports all the code from @microsoft/signalr
+**NOTE:** You don't need to install @microsoft/signalr as  it's already included in this package for convenience and exports all the code from @microsoft/signalr.
+Also, apart of SignalR invoke method, redux-signalr gives you an access to Redux state and dispatch in actions, so you don't need to use redux-thunk and redux-signalr simultaneously as the latter already does the same job.
 
 ### First, configure your middleware and register callbacks
 
