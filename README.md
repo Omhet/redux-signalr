@@ -17,7 +17,7 @@ Also, apart of SignalR invoke method, redux-signalr gives you an access to Redux
 
 ### First, configure your middleware and register callbacks
 
-src/redux/withSignalRMiddleware.ts
+src/redux/withSignalR.ts
 ```ts
 import { withCallbacks, signalMiddleware, LogLevel, HttpTransportType } from 'redux-signalr';
 
