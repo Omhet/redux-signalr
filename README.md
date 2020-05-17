@@ -44,7 +44,7 @@ const signal = signalMiddleware({
 
 src/redux/index.ts
 ```ts
-import signal from './helpers/createSignalMiddleware';
+import signal from './helpers/withSignalR';
 
 export default function configureStore(preloadedState?: RootState) {
   return createStore(
@@ -59,7 +59,7 @@ export default function configureStore(preloadedState?: RootState) {
 
 src/redux/modules/example/index.ts
 ```ts
-const sendMessage = (txt: string): Action => (dispatch, getState, invoke) => {
+export const sendMessage = (txt: string): Action => (dispatch, getState, invoke) => {
   invoke('SendMessage', txt)
 };
 ```
