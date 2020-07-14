@@ -22,10 +22,10 @@ src/redux/withSignalR.ts
 import { withCallbacks, signalMiddleware, LogLevel, HttpTransportType } from 'redux-signalr';
 
 const callbacks = withCallbacks()
-  .add('ReceiveMessage', (msg: string) => (dispatch: Dispatch) => {
+  .add('ReceiveMessage', (msg: string) => (dispatch) => {
     dispatch(setText(msg));
   })
-  .add('ReceiveRandomNumber', (num: number) => (dispatch: Dispatch) => {
+  .add('ReceiveRandomNumber', (num: number) => (dispatch) => {
     dispatch(exampleFsa.setRandomNumber(num));
   })
   
