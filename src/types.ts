@@ -45,8 +45,6 @@ export type SignalMiddleware<S = {}, A extends Action = AnyAction> = Middleware<
 
 export interface MiddlewareConfig {
     callbacks: ReturnType<typeof withCallbacks>,
-    url: string,
-    connectionOptions?: signalR.IHttpConnectionOptions,
-    logLevel?: signalR.LogLevel,
+    connection: signalR.HubConnection,
     onStart?(): void;
 }
