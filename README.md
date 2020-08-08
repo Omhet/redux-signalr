@@ -15,29 +15,32 @@ yarn add redux-signalr
 **NOTE:** You don't need to install @microsoft/signalr as  it's already included in this package for convenience and exports all the code from @microsoft/signalr.
 Also, apart of SignalR invoke method, redux-signalr gives you an access to Redux state and dispatch in actions, so you don't need to use redux-thunk and redux-signalr simultaneously as the latter already does the same job.
 
-### First, configure your middleware and register callbacks
+### First, configure your middleware: register callbacks and build a connection object
 
 src/redux/withSignalR.ts
 ```ts
-import { withCallbacks, signalMiddleware, LogLevel, HttpTransportType } from 'redux-signalr';
+import { withCallbacks, signalMiddleware, LogLevel, HttpTransportType, HubConnectionBuilder } from 'redux-signalr';
 
 const callbacks = withCallbacks()
   .add('ReceiveMessage', (msg: string) => (dispatch) => {
     dispatch(setText(msg));
   })
   .add('ReceiveRandomNumber', (num: number) => (dispatch) => {
-    dispatch(exampleFsa.setRandomNumber(num));
+    dispatch(setRandomNumber(num));
   })
   
+const connection = new HubConnectionBuilder()
+  .configureLogging(LogLevel.Debug)
+  .withUrl("https://0.0.0.0:5001/testHub", {
+    skipNegotiation: true,
+    transport: HttpTransportType.WebSockets,
+  })
+  .build();
+
 const signal = signalMiddleware({
-    callbacks,
-    url: 'https://192.168.1.12:5001/testHub',
-    logLevel: LogLevel.Debug,
-    connectionOptions: { 
-      skipNegotiation: true,
-      transport: HttpTransportType.WebSockets
-    }
-})
+  callbacks,
+  connection,
+});
 ```
 
 ### Second, apply the configured middleware 
