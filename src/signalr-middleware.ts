@@ -1,9 +1,9 @@
-import { SignalMiddleware, MiddlewareConfig } from "./types";
+import { SignalMiddleware, MiddlewareConfig } from './types';
 
 const signal = ({
   callbacks,
   onStart = () => {},
-  connection
+  connection,
 }: MiddlewareConfig): SignalMiddleware => (store) => {
   const { callbackMap } = callbacks;
   for (const [name, callback] of callbackMap) {
@@ -22,7 +22,7 @@ const signal = ({
     });
 
   return (next) => (action) =>
-    typeof action === "function"
+    typeof action === 'function'
       ? action(
           store.dispatch.bind(store),
           store.getState.bind(store),

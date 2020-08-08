@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as signalR from "@microsoft/signalr";
-import { withCallbacks } from "./helpers";
+import * as signalR from '@microsoft/signalr';
+import { withCallbacks } from './helpers';
 
 export interface AnyAction extends Action {
   // Allows any extra properties to be defined in an action.
@@ -38,7 +38,7 @@ export interface SignalDispatch<S, A extends Action> {
 export type SignalAction<R, S, A extends Action> = (
   dispatch: SignalDispatch<S, A>,
   getState: () => S,
-  invoke: signalR.HubConnection["invoke"]
+  invoke: signalR.HubConnection['invoke']
 ) => R;
 
 export type SignalMiddleware<S = {}, A extends Action = AnyAction> = Middleware<
