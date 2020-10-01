@@ -5,7 +5,9 @@
 ```bash
 npm install redux-signalr
 ```
+
 or
+
 ```bash
 yarn add redux-signalr
 ```
@@ -18,6 +20,7 @@ Also, apart of SignalR invoke method, redux-signalr gives you an access to Redux
 ### First, configure your middleware: register callbacks and build a connection object
 
 src/redux/withSignalR.ts
+
 ```ts
 import { withCallbacks, signalMiddleware, LogLevel, HttpTransportType, HubConnectionBuilder } from 'redux-signalr';
 
@@ -43,9 +46,10 @@ const signal = signalMiddleware({
 });
 ```
 
-### Second, apply the configured middleware 
+### Second, apply the configured middleware
 
 src/redux/index.ts
+
 ```ts
 import signal from './helpers/withSignalR';
 
@@ -61,6 +65,7 @@ export default function configureStore(preloadedState?: RootState) {
 ### Third, write action functions as you would do with thunk, but now it has the third parameter - invoke (from signalR) to call server methods
 
 src/redux/modules/example/index.ts
+
 ```ts
 export const sendMessage = (txt: string): Action => (dispatch, getState, invoke) => {
   invoke('SendMessage', txt)
@@ -70,6 +75,7 @@ export const sendMessage = (txt: string): Action => (dispatch, getState, invoke)
 ### Fourth (only for TS), add custom types
 
 src/redux/types.ts
+
 ```ts
 import { rootReducer } from './rootReducer';
 import { AnyAction } from 'redux';
@@ -87,4 +93,48 @@ export type Dispatch<Action extends AnyAction = AnyAction> = SignalDispatch<
   RootState,
   Action
 >;
+```
+
+#### Additional features
+
+##### Don't start a connection immediately
+
+Create signalMiddleware with shouldConnectionStartImmediately set to false. Export the 'connection'.
+
+```ts  
+export const connection = new HubConnectionBuilder()
+  .configureLogging(LogLevel.Debug)
+  .withUrl("https://0.0.0.0:5001/testHub", {
+    skipNegotiation: true,
+    transport: HttpTransportType.WebSockets,
+  })
+  .build();
+
+const signal = signalMiddleware({
+  callbacks,
+  connection,
+  shouldConnectionStartImmediately: false
+});
+```
+
+Then, import the 'connection' in the place you want and start it if it's not already.
+Here is an example with a simple Button container:
+
+```ts
+import { connection } from "../redux/helpers/createSignalMiddleware";
+
+const StartConnectionButton: FunctionComponent = () => {
+  const handleClick = useCallback(() => {
+    if (connection.state !== HubConnectionState.Connected) {
+      connection
+        .start()
+        .then(() => console.log("Connection started"))
+        .catch((err) => console.error(err.toString()));
+    }
+  }, []);
+
+  return <Button onClick={handleClick}>Start Connection</Button>;
+};
+
+export default StartConnectionButton;
 ```
