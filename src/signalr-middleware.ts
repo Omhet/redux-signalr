@@ -4,6 +4,7 @@ const signal = ({
   callbacks,
   onStart = () => {},
   connection,
+  shouldConnectionStartImmediately = true,
 }: MiddlewareConfig): SignalMiddleware => (store) => {
   const { callbackMap } = callbacks;
   for (const [name, callback] of callbackMap) {
@@ -12,14 +13,16 @@ const signal = ({
     });
   }
 
-  connection
-    .start()
-    .then(function () {
-      onStart();
-    })
-    .catch(function (err) {
-      return console.error(err.toString());
-    });
+  if (shouldConnectionStartImmediately) {
+    connection
+      .start()
+      .then(function () {
+        onStart();
+      })
+      .catch(function (err) {
+        return console.error(err.toString());
+      });
+  }
 
   return (next) => (action) =>
     typeof action === 'function'

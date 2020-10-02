@@ -51,4 +51,5 @@ export interface MiddlewareConfig {
   callbacks: ReturnType<typeof withCallbacks>;
   connection: signalR.HubConnection;
   onStart?(): void;
+  shouldConnectionStartImmediately?: boolean;
 }
