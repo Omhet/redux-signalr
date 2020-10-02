@@ -17,30 +17,40 @@ yarn add redux-signalr
 **NOTE:** You don't need to install @microsoft/signalr as  it's already included in this package for convenience and exports all the code from @microsoft/signalr.
 Also, apart of SignalR invoke method, redux-signalr gives you an access to Redux state and dispatch in actions, so you don't need to use redux-thunk and redux-signalr simultaneously as the latter already does the same job.
 
-### First, configure your middleware: register callbacks and build a connection object
+### First, configuration
 
-src/redux/withSignalR.ts
+#### Build a connection object
 
 ```ts
-import { withCallbacks, signalMiddleware, LogLevel, HttpTransportType, HubConnectionBuilder } from 'redux-signalr';
-
-const callbacks = withCallbacks()
-  .add('ReceiveMessage', (msg: string) => (dispatch) => {
-    dispatch(setText(msg));
-  })
-  .add('ReceiveRandomNumber', (num: number) => (dispatch) => {
-    dispatch(setRandomNumber(num));
-  })
-  
 const connection = new HubConnectionBuilder()
   .configureLogging(LogLevel.Debug)
-  .withUrl("https://0.0.0.0:5001/testHub", {
+  .withUrl('https://0.0.0.0:5001/testHub', {
     skipNegotiation: true,
     transport: HttpTransportType.WebSockets,
   })
   .build();
+```
 
-const signal = signalMiddleware({
+#### Register callbacks
+
+In the callbacks you have an access to redux dispatch and getState and signalr invoke methods.
+
+```ts
+const callbacks = withCallbacks()
+  .add('ReceiveMessage', (msg: string) => (dispatch) => {
+    dispatch(setText(msg));
+  })
+  .add('ReceiveRandomNumber', (num: number) => (dispatch, getState, invoke) => {
+    const { example } = getState();
+    dispatch(setRandomNumber(num));
+    invoke('SendMessage', txt + example.text)
+  })
+```
+
+#### Create middleware with the callbcaks and connection object
+
+```ts
+export const signal = signalMiddleware({
   callbacks,
   connection,
 });
@@ -48,10 +58,8 @@ const signal = signalMiddleware({
 
 ### Second, apply the configured middleware
 
-src/redux/index.ts
-
 ```ts
-import signal from './helpers/withSignalR';
+import { signal } from './helpers/withSignalR';
 
 export default function configureStore(preloadedState?: RootState) {
   return createStore(
@@ -64,8 +72,6 @@ export default function configureStore(preloadedState?: RootState) {
 
 ### Third, write action functions as you would do with thunk, but now it has the third parameter - invoke (from signalR) to call server methods
 
-src/redux/modules/example/index.ts
-
 ```ts
 export const sendMessage = (txt: string): Action => (dispatch, getState, invoke) => {
   invoke('SendMessage', txt)
@@ -73,8 +79,6 @@ export const sendMessage = (txt: string): Action => (dispatch, getState, invoke)
 ```
 
 ### Fourth (only for TS), add custom types
-
-src/redux/types.ts
 
 ```ts
 import { rootReducer } from './rootReducer';
@@ -95,21 +99,20 @@ export type Dispatch<Action extends AnyAction = AnyAction> = SignalDispatch<
 >;
 ```
 
+Use those Dispatch and RootState types in callbacks, this way you will have correct typings for dispatch and getState methods in your callbacks
+
+```ts
+const callbacks = withCallbacks<Dispatch, RootState>()
+  .add('CallbackName', () => (dispatch, getState, invoke) => { }
+```
+
 #### Additional features
 
 ##### Don't start a connection immediately
 
-Create signalMiddleware with shouldConnectionStartImmediately set to false. Export the 'connection'.
+Create signalMiddleware with shouldConnectionStartImmediately set to false.
 
 ```ts  
-export const connection = new HubConnectionBuilder()
-  .configureLogging(LogLevel.Debug)
-  .withUrl("https://0.0.0.0:5001/testHub", {
-    skipNegotiation: true,
-    transport: HttpTransportType.WebSockets,
-  })
-  .build();
-
 const signal = signalMiddleware({
   callbacks,
   connection,
