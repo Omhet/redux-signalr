@@ -8,7 +8,14 @@ const signal = ({
   const { callbackMap } = callbacks;
   for (const [name, callback] of callbackMap) {
     connection.on(name, (...args) => {
-      callback.call(null, ...args).call(store, store.dispatch.bind(store));
+      callback
+        .call(null, ...args)
+        .call(
+          store,
+          store.dispatch.bind(store),
+          store.getState.bind(store),
+          connection.invoke.bind(connection)
+        );
     });
   }
 

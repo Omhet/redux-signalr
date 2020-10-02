@@ -1,14 +1,12 @@
-type Name = string;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Callback = (...args: any[]) => (dispatch: any) => void;
+import { Callback, CallbackName, WithCallbacksCreator } from './types';
 
-export const withCallbacks = () => {
-  const callbackMap = new Map<Name, Callback>();
+export const withCallbacks: WithCallbacksCreator = () => {
+  const callbackMap = new Map<CallbackName, Callback>();
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const moduleReducer = () => {};
 
-  const add = (name: Name, callback: Callback) => {
+  const add = (name: CallbackName, callback: Callback) => {
     callbackMap.set(name, callback);
     return moduleReducer;
   };
