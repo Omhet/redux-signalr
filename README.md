@@ -1,5 +1,6 @@
 # Redux middleware for SignalR (ASP.NET Core)
-[![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)]()
+
+[![NPM Version](https://img.shields.io/npm/v/redux-signalr.svg?style=flat)](https://www.npmjs.com/package/redux-signalr)
 [![NPM License](https://img.shields.io/npm/l/all-contributors.svg?style=flat)](https://github.com/Omhet/redux-signalr/blob/master/LICENSE)
 
 ## Installation
