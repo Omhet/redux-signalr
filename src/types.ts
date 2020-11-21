@@ -1,33 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as signalR from '@microsoft/signalr';
-
-export interface AnyAction extends Action {
-  // Allows any extra properties to be defined in an action.
-  [extraProps: string]: any;
-}
-
-export interface Action<T = any> {
-  type: T;
-}
-
-export interface Dispatch<A extends Action = AnyAction> {
-  <T extends A>(action: T): T;
-}
-
-export interface Middleware<
-  DispatchExt = {},
-  S = any,
-  D extends Dispatch = Dispatch
-> {
-  (api: MiddlewareAPI<D, S>): (
-    next: Dispatch<AnyAction>
-  ) => (action: any) => any;
-}
-
-export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
-  dispatch: D;
-  getState(): S;
-}
+import { Action, Dispatch, Middleware, AnyAction } from 'redux';
 
 export interface SignalDispatch<S, A extends Action> {
   <T extends A>(action: T): T;
