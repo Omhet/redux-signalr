@@ -20,21 +20,24 @@ export type SignalMiddleware<S = {}, A extends Action = AnyAction> = Middleware<
 >;
 
 export type CallbackName = string;
-export type Callback<D = any, S = any> = (
+export type Callback<D extends Dispatch = Dispatch, S = any> = (
   ...args: any[]
 ) => (
   dispatch: D,
   getState: () => S,
   invoke: signalR.HubConnection['invoke']
 ) => void;
-export interface WithCallbacks<D = any, S = any> {
+export interface WithCallbacks<D extends Dispatch = Dispatch, S = any> {
   (): void;
   add: (name: CallbackName, callback: Callback<D, S>) => WithCallbacks<D, S>;
   callbackMap: Map<string, Callback<D, S>>;
 }
-export type WithCallbacksCreator = <D = any, S = any>() => WithCallbacks<D, S>;
+export type WithCallbacksCreator = <
+  D extends Dispatch = Dispatch,
+  S = any
+>() => WithCallbacks<D, S>;
 
-export interface MiddlewareConfig<D = any, S = any> {
+export interface MiddlewareConfig<D extends Dispatch = Dispatch, S = any> {
   callbacks: WithCallbacks<D, S>;
   connection: signalR.HubConnection;
   onStart?(): void;
