@@ -17,7 +17,7 @@ yarn add redux-signalr
 
 ## Usage
 
-**NOTE:** Also, apart of SignalR invoke method, redux-signalr gives you an access to Redux state and dispatch in actions, so you don't need to use redux-thunk and redux-signalr simultaneously as the latter already does the same job.
+**NOTE:** Apart of SignalR invoke method, redux-signalr gives you an access to Redux state and dispatch in actions, so you don't need to use redux-thunk and redux-signalr simultaneously as the latter already does the same job.
 
 ### First, configuration
 
