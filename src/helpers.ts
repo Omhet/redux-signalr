@@ -2,15 +2,15 @@ import { Callback, CallbackName, WithCallbacksCreator } from './types';
 import { Dispatch } from 'redux';
 
 export const withCallbacks: WithCallbacksCreator = <
-  D extends Dispatch = Dispatch,
-  S = any
+  S = any,
+  D extends Dispatch = Dispatch
 >() => {
-  const callbackMap = new Map<CallbackName, Callback<D, S>>();
+  const callbackMap = new Map<CallbackName, Callback<S, D>>();
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const moduleReducer = () => {};
 
-  const add = (name: CallbackName, callback: Callback<D, S>) => {
+  const add = (name: CallbackName, callback: Callback<S, D>) => {
     callbackMap.set(name, callback);
     return moduleReducer;
   };

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as signalR from '@microsoft/signalr';
+import { HubConnection } from '@microsoft/signalr';
 import { Action, Dispatch, Middleware, AnyAction } from 'redux';
 
 export interface SignalDispatch<S, A extends Action> {
@@ -10,7 +9,7 @@ export interface SignalDispatch<S, A extends Action> {
 export type SignalAction<R, S, A extends Action> = (
   dispatch: SignalDispatch<S, A>,
   getState: () => S,
-  invoke: signalR.HubConnection['invoke']
+  invoke: HubConnection['invoke']
 ) => R;
 
 export type SignalMiddleware<S = {}, A extends Action = AnyAction> = Middleware<
@@ -20,26 +19,22 @@ export type SignalMiddleware<S = {}, A extends Action = AnyAction> = Middleware<
 >;
 
 export type CallbackName = string;
-export type Callback<D extends Dispatch = Dispatch, S = any> = (
+export type Callback<S = any, D extends Dispatch = Dispatch> = (
   ...args: any[]
-) => (
-  dispatch: D,
-  getState: () => S,
-  invoke: signalR.HubConnection['invoke']
-) => void;
-export interface WithCallbacks<D extends Dispatch = Dispatch, S = any> {
+) => (dispatch: D, getState: () => S, invoke: HubConnection['invoke']) => void;
+export interface WithCallbacks<S = any, D extends Dispatch = Dispatch> {
   (): void;
-  add: (name: CallbackName, callback: Callback<D, S>) => WithCallbacks<D, S>;
-  callbackMap: Map<string, Callback<D, S>>;
+  add: (name: CallbackName, callback: Callback<S, D>) => WithCallbacks<S, D>;
+  callbackMap: Map<string, Callback<S, D>>;
 }
 export type WithCallbacksCreator = <
-  D extends Dispatch = Dispatch,
-  S = any
->() => WithCallbacks<D, S>;
+  S = any,
+  D extends Dispatch = Dispatch
+>() => WithCallbacks<S, D>;
 
-export interface MiddlewareConfig<D extends Dispatch = Dispatch, S = any> {
-  callbacks: WithCallbacks<D, S>;
-  connection: signalR.HubConnection;
+export interface MiddlewareConfig<S = any, D extends Dispatch = Dispatch> {
+  callbacks: WithCallbacks<S, D>;
+  connection: HubConnection;
   onStart?(): void;
   shouldConnectionStartImmediately?: boolean;
 }
